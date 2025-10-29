@@ -1,0 +1,51 @@
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.solid:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+button, input{
+  width: 33.33%;
+  font-size: 1rem;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  transition: background-color 300ms;
+  min-width: 150px;
+}
+
+button[type="button"]{background-color: #646cff;}
+button[type="submit"]{background-color: #38aa75;}
+button[type="reset"]{background-color: #ff6464;}
+input[type="number"]{color: black;}
+
+button:not([type="button"]):not([type="submit"]):not([type="reset"]){
+  color: black;
+}
+
+input[type="number"]{
+  background-color: white;
+}
