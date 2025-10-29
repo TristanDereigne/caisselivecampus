@@ -4,13 +4,15 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "test": "vitest",
     "dev": "bun src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
-    "@types/morgan": "^1.9.10"
+    "@types/morgan": "^1.9.10",
+    "vitest": "^4.0.5"
   },
   "peerDependencies": {
     "typescript": "^5"

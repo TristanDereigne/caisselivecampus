@@ -32,6 +32,7 @@ function App(){
             <h2 class='text-xl text-white font-semibold mb-2'>Somme à régler</h2>
             <form action="" onSubmit={handleSubmit}>
                 <input
+                    id="cyBillInput"
                     type="number"
                     class='p-2 rounded-md text-black w-full mb-4'
                     placeholder='Montant à régler'
@@ -56,8 +57,8 @@ function App(){
                         <button type="button" onClick={() => addToPaidTotal(5)}>5 euros</button>
                     </div>
                     <div class='flex flex-row gap-2'>
-                        <button type="button" onClick={() => addToPaidTotal(10)}>10 euros</button>
-                        <button type="button" onClick={() => addToPaidTotal(20)}>20 euros</button>
+                        <button id="cy10EurBtn" type="button" onClick={() => addToPaidTotal(10)}>10 euros</button>
+                        <button id="cy20EurBtn" type="button" onClick={() => addToPaidTotal(20)}>20 euros</button>
                         <button type="button" onClick={() => addToPaidTotal(50)}>50 euros</button>
                     </div>
                     <div class='flex flex-row gap-2'>
@@ -69,11 +70,11 @@ function App(){
                         <button class='text-black bg-white'>
                             Total : {paidTotal().toFixed(2)} euros
                         </button>
-                        <button type="submit">Valider</button>
+                        <button id="cyValidateBtn" type="submit">Valider</button>
                         <button type="reset" onClick={() => resetPaidTotal()}>Annuler</button>
                     </div>
                 </div>
-                <div id='backed-money-summary' class='mt-4 text-white'>
+                <div id='backed-money-summary' class='mt-4'>
                     <Show when={!backedMoney.loading} fallback={
                         <>
                             <h2 class='text-xl text-white font-semibold mb-2 mt-4'>Monnaie à rendre</h2>
@@ -81,9 +82,14 @@ function App(){
                         </>
                     }>
                         <h2 class='text-xl text-white font-semibold mb-2 mt-4'>Monnaie à rendre</h2>
-                        <For each={backedMoney()} fallback={<div>En attente</div>}>
-                            {(item) => <p>{item.price} * {item.quantity}</p>}
+                        <For each={backedMoney()} fallback={<div class='text-white'>En attente</div>}>
+                            {(item) => <p class='item text-white'>{item.price} * {item.quantity}</p>}
                         </For>
+                    </Show>
+                    <Show when={backedMoney.error}>
+                        <>
+                            <p class='text-red-500 text-xl font-semibold'> Erreur, le client a peut-être donné trop d'argent </p>
+                        </>
                     </Show>
                 </div>
             </form>
