@@ -2,7 +2,6 @@ export default async function getBackedMoney(bill_amount: number, paid_total: nu
     let backed_money: Array<{price: number, quantity: number}> = [];
 
     try{
-        console.log(`getBackedMoney, ${bill_amount}, ${paid_total}`);
         const response = await fetch(
             'http://localhost:2012/compute_backed_money',
             {
@@ -16,10 +15,11 @@ export default async function getBackedMoney(bill_amount: number, paid_total: nu
                 })
             }
         );
-
-        backed_money = await response.json();
+        const data = await response.json();
+        backed_money = data.backed_money;
     }
-    catch(error){console.log("FOIRÉ !!!");};
+    catch(error){console.error("Erreur backend", error);};
+
 
     return backed_money;
 };
