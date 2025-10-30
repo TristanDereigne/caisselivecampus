@@ -1,0 +1,50 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # Backend Tests
+      - name: Install Backend Dependencies
+        working-directory: ./back
+        run: bun install
+
+      - name: Run Backend Tests
+        working-directory: ./back
+        run: bun test
+
+      # Frontend Tests
+      - name: Install Frontend Dependencies
+        working-directory: ./front
+        run: bun install
+
+      - name: Install Cypress Binary
+        working-directory: ./front
+        run: bunx cypress install
+
+      - name: Run Frontend E2E Tests
+        working-directory: ./front
+        run: bun run test:ci
+        env:
+          CYPRESS_baseUrl: http://localhost:5173
+
+      # Build
+      - name: Build Frontend
+        working-directory: ./front
+        run: bun run build
+        if: success()
