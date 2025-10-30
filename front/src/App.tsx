@@ -15,7 +15,7 @@ function App(){
         setPaymentData({bill:billAmount(), payment:paidTotal()})
     };
     
-    async function submitPayment(data){
+    async function submitPayment(data:any){
 
         if (!data) return;
         const backedMoneyResponse = await getBackedMoney(data.bill, data.payment);
