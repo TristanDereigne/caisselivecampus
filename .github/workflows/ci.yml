@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -19,7 +20,6 @@ jobs:
         with:
           bun-version: latest
 
-      # Backend Tests
       - name: Install Backend Dependencies
         working-directory: ./back
         run: bun install
@@ -28,7 +28,6 @@ jobs:
         working-directory: ./back
         run: bun test
 
-      # Frontend Tests
       - name: Install Frontend Dependencies
         working-directory: ./front
         run: bun install
@@ -37,13 +36,21 @@ jobs:
         working-directory: ./front
         run: bunx cypress install
 
+      - name: Start Backend Server
+        working-directory: ./back
+        run: bun run dev &
+        
+      - name: Wait for Backend
+        run: |
+          echo "Waiting for backend on port 2012..."
+          timeout 30 bash -c 'until curl -f http://localhost:2012 2>/dev/null; do sleep 1; done' || echo "Backend ready or timeout"
+
       - name: Run Frontend E2E Tests
         working-directory: ./front
         run: bun run test:ci
         env:
           CYPRESS_baseUrl: http://localhost:5173
 
-      # Build
       - name: Build Frontend
         working-directory: ./front
         run: bun run build
