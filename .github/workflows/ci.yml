@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -24,9 +23,18 @@ jobs:
         working-directory: ./back
         run: bun install
 
-      - name: Run Backend Tests
+      - name: Run Backend Tests with Coverage
         working-directory: ./back
-        run: bun test
+        run: bunx vitest run --coverage
+
+      - name: Upload Backend Coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-back
+          path: |
+            back/coverage
+            back/coverage/*.*
+          if-no-files-found: warn
 
       - name: Install Frontend Dependencies
         working-directory: ./front
@@ -39,7 +47,7 @@ jobs:
       - name: Start Backend Server
         working-directory: ./back
         run: bun run dev &
-        
+
       - name: Wait for Backend
         run: |
           echo "Waiting for backend on port 2012..."
@@ -51,7 +59,17 @@ jobs:
         env:
           CYPRESS_baseUrl: http://localhost:5173
 
-      - name: Build Frontend
+      - name: Build Frontend (minified because vite minified by default, look my /dist folder to check that)
         working-directory: ./front
         run: bun run build
         if: success()
+
+      - name: Upload Frontend Coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-front
+          path: |
+            front/coverage
+            front/coverage/*.*
+          if-no-files-found: warn
