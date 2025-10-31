@@ -28,21 +28,21 @@ export function computeBackedMoneyLogic(bill_amount: number, paid_total: number)
     for(let i = cash_withdrawer_fund.length - 1; i >= 0; i--){
         const money = cash_withdrawer_fund[i];
         
-        if (difference < money.price || money.quantity <= 0) {
+        if (difference < money!.price || money!.quantity <= 0) {
             continue;
         }
 
-        const potentialQuantity = Math.floor(difference / money.price);
+        const potentialQuantity = Math.floor(difference / money!.price);
 
-        const quantityToGive = Math.min(potentialQuantity, money.quantity);
+        const quantityToGive = Math.min(potentialQuantity, money!.quantity);
 
         if (quantityToGive > 0) {
-            difference -= quantityToGive * money.price;
+            difference -= quantityToGive * money!.price;
             difference = parseFloat(difference.toFixed(2));
 
-            refund_money[i].quantity = quantityToGive;
+            refund_money[i]!.quantity = quantityToGive;
 
-            cash_withdrawer_fund[i].quantity -= quantityToGive;
+            cash_withdrawer_fund[i]!.quantity -= quantityToGive;
         }
 
         if(difference === 0) {
