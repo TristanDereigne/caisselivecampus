@@ -8,7 +8,7 @@ on:
       - completed
 
 jobs:
-  make-docker:
+  make-docker-for-backend:
     name: build-image
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -22,13 +22,13 @@ jobs:
 
       - name: build-image
         id: build-image
-        run: docker build -t nyusuka/mdv27-ci:latest .
+        run: docker build -t nyusuka/mdv27-ci-back:latest ./back
 
       - name: push-image
         id: push-image
         run: |
           echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u nyusuka --password-stdin
-          docker push nyusuka/mdv27-ci:latest
+          docker push nyusuka/mdv27-ci-back:latest
 
   inform-user:
     name: inform-user
