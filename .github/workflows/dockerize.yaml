@@ -9,7 +9,7 @@ on:
 
 jobs:
   make-docker-for-backend:
-    name: build-image
+    name: build-backend-image
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
@@ -29,6 +29,28 @@ jobs:
         run: |
           echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u nyusuka --password-stdin
           docker push nyusuka/mdv27-ci-back:latest
+
+  make-docker-for-frontend:
+    name: build-frontend-image
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}
+
+      - name: build-image
+        id: build-image
+        run: docker build -t nyusuka/mdv27-ci-front:latest ./front
+
+      - name: push-image
+        id: push-image
+        run: |
+          echo ${{ secrets.DOCKER_HUB_TOKEN }} | docker login -u nyusuka --password-stdin
+          docker push nyusuka/mdv27-ci-:latest
 
   inform-user:
     name: inform-user
